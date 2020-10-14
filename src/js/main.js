@@ -1,8 +1,3 @@
-// const moment = require("moment");
-import moment from "moment";
+import Controller from "./components/controller";
 
-console.log("hello");
-console.log(moment().startOf("day").fromNow());
-
-let bob = "bob";
-console.log(`${bob} is cool`);
+const controller = new Controller();

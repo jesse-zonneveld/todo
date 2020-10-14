@@ -1,0 +1,149 @@
+@use 'variables';
+
+.btn {
+    white-space: nowrap;
+    width: fit-content;
+    padding: 10px 40px;
+    font-size: 1rem;
+    font-weight: 400;
+    text-align: center;
+    border-radius: $border;
+    box-shadow: $shadow;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+        transform: scale(1.05);
+    }
+}
+
+.btn-new-list {
+    background-color: $green;
+    margin-bottom: 30px;
+}
+
+.btn-add-item {
+    background-color: $yellow;
+}
+
+.btn-create-item,
+.btn-create-list {
+    background-color: $green;
+    margin-top: 20px;
+    align-self: center;
+    width: 100%;
+}
+
+.btn-overlay-close {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    background: none;
+    color: $font-color-light-grey;
+    border: 0;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+        color: white;
+    }
+}
+
+.three-way-btn {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-content: center;
+    width: 250px;
+    text-align: center;
+    background-color: $faded-grey;
+    box-shadow: $shadow;
+    border-radius: $border;
+    z-index: 1;
+
+    .btn-low,
+    .btn-medium,
+    .btn-high {
+        position: relative;
+        z-index: 5;
+        transition: all 0.5s;
+    }
+
+    &:after {
+        content: "";
+        position: absolute;
+        height: 100%;
+        width: 33.33%;
+        left: 0;
+        background-color: $green;
+        border-radius: $border;
+        z-index: 4;
+        transition: all 0.3s ease-in-out;
+    }
+
+    &.switch-low {
+        .btn-low {
+            opacity: 1;
+            cursor: default;
+        }
+
+        .btn-medium {
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        .btn-high {
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        &:after {
+            left: 0;
+            background-color: $green;
+        }
+    }
+
+    &.switch-medium {
+        .btn-low {
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        .btn-medium {
+            opacity: 1;
+            cursor: default;
+        }
+
+        .btn-high {
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        &:after {
+            left: 33.33%;
+            background-color: $yellow;
+        }
+    }
+
+    &.switch-high {
+        .btn-low {
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        .btn-medium {
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        .btn-high {
+            opacity: 1;
+            cursor: default;
+        }
+
+        &:after {
+            left: 66.7%;
+            background-color: $red;
+        }
+    }
+}

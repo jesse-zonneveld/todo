@@ -4,15 +4,133 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <title>Test</title>
-        <link rel="stylesheet" href="./css/style.css" />
+        <title>ToDo List</title>
+        <link rel="stylesheet" href="./css/bundle.css" />
+        <script
+            src="https://kit.fontawesome.com/c0d1af353e.js"
+            crossorigin="anonymous"
+        ></script>
     </head>
     <body>
-        <h1>Hello World</h1>
-        <div class="grid">
-            <div></div>
-            <div></div>
-            <div></div>
+        <h1 class="headline headline--large">ToDo List</h1>
+        <div class="l-container-full-screen">
+            <div class="l-container-1080 main-content">
+                <div class="lists-section">
+                    <div class="btn btn-new-list">New List</div>
+                    <ul class="lists">
+                        <li class="list">My First List</li>
+                        <li class="list">Shopping</li>
+                        <li class="list">Books to Read</li>
+                        <li class="completed-list">Completed Items</li>
+                    </ul>
+                </div>
+                <div class="items-section">
+                    <div class="instructions">
+                        <span class="sort">Sort by priority</span> or drag items
+                        to reorganize
+                    </div>
+                    <div class="item-container" data-index="0" draggable="true">
+                        <div class="item">
+                            <div class="options">
+                                <div class="option__edit">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="option__delete">
+                                    <i class="far fa-trash-alt"></i>
+                                </div>
+                            </div>
+                            <div class="item__checkBox priority-low"></div>
+                            <div class="contents">
+                                <div class="contents__title">0000000</div>
+                                <div class="contents__due-date">
+                                    10 days from now
+                                </div>
+                                <div class="contents__description">
+                                    Press the 'New List' button and be on your
+                                    way.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-container" data-index="1" draggable="true">
+                        <div class="item">
+                            <div class="options">
+                                <div class="option__edit">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="option__delete">
+                                    <i class="far fa-trash-alt"></i>
+                                </div>
+                            </div>
+                            <div class="item__checkBox priority-high"></div>
+                            <div class="contents">
+                                <div class="contents__title">1</div>
+                                <div class="contents__due-date">
+                                    10 days from now
+                                </div>
+                                <div class="contents__description">
+                                    Press the 'New List' button and be on your
+                                    way.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item-container" data-index="2" draggable="true">
+                        <div class="item">
+                            <div class="options">
+                                <div class="option__edit">
+                                    <i class="fas fa-edit"></i>
+                                </div>
+                                <div class="option__delete">
+                                    <i class="far fa-trash-alt"></i>
+                                </div>
+                            </div>
+                            <div class="item__checkBox priority-med"></div>
+                            <div class="contents">
+                                <div class="contents__title">2</div>
+                                <div class="contents__due-date">
+                                    10 days from now
+                                </div>
+                                <div class="contents__description">
+                                    Press the 'New List' button and be on your
+                                    way.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="new-item-menu">
+                        <div class="btn btn-add-item">Add Item</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="overlay">
+            <div class="overlay-inner-item">
+                <div class="headline headline--medium">New Item</div>
+                <div class="btn-overlay-close">X Close</div>
+                <form class="contents">
+                    <input type="text" placeholder="Title" />
+                    <textarea rows="4" placeholder="Description"></textarea>
+                    <div class="priority-container">
+                        <label>Priority:</label>
+                        <div class="three-way-btn switch-low">
+                            <div class="btn-low">Low</div>
+                            <div class="btn-medium">Medium</div>
+                            <div class="btn-high">High</div>
+                        </div>
+                    </div>
+                    <div class="btn btn-create-item">Create Item</div>
+                </form>
+            </div>
+            <div class="overlay-inner-list">
+                <div class="headline headline--medium">New List</div>
+                <div class="btn-overlay-close">X Close</div>
+                <form class="contents">
+                    <input type="text" placeholder="Title" />
+                    <div class="btn btn-create-list">Create List</div>
+                </form>
+            </div>
         </div>
 
         <script src="./bundle.js"></script>

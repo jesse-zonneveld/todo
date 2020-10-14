@@ -1,0 +1,158 @@
+@use 'variables';
+
+.main-content {
+    display: flex;
+
+    .lists-section {
+        display: flex;
+        flex-direction: column;
+        margin-right: 50px;
+    }
+
+    .items-section {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+
+        .instructions {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            margin-left: 20px;
+        }
+
+        .new-item-menu {
+            display: flex;
+        }
+    }
+}
+
+.item-container {
+    .item {
+        position: relative;
+        display: flex;
+        margin-bottom: 20px;
+        background-color: white;
+        box-shadow: $shadow;
+
+        .options {
+            position: absolute;
+            display: flex;
+            top: 0;
+            right: 0;
+            opacity: 0;
+            transition: all 0.3s;
+
+            i {
+                margin-right: 7px;
+                opacity: 0.5;
+                transition: all 0.3s;
+
+                &:hover {
+                    opacity: 1;
+                    cursor: pointer;
+                }
+            }
+
+            &.active {
+                opacity: 1;
+            }
+        }
+
+        .item__checkBox {
+            position: relative;
+            width: 100px;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            &.active:before,
+            &.active:hover:before {
+                position: absolute;
+                content: "\2713";
+                font-size: 5rem;
+                text-align: center;
+                top: 42%;
+                left: 52%;
+                transform: translate(-42%, -52%);
+                opacity: 1;
+                z-index: 1;
+            }
+
+            &:before {
+                position: absolute;
+                content: "\2713";
+                font-size: 5rem;
+                text-align: center;
+                top: 42%;
+                left: 52%;
+                transform: translate(-42%, -52%);
+                opacity: 0;
+                z-index: 1;
+                transition: all 0.3s;
+            }
+
+            &:hover:before {
+                position: absolute;
+                content: "\2713";
+                font-size: 5rem;
+                text-align: center;
+                top: 42%;
+                left: 52%;
+                transform: translate(-42%, -52%);
+                opacity: 0.5;
+                z-index: 1;
+            }
+
+            &:after {
+                position: absolute;
+                content: "";
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                border: 2px solid rgb(133, 133, 133);
+            }
+
+            &.priority-low:after {
+                background-color: $green;
+            }
+
+            &.priority-med:after {
+                background-color: $yellow;
+            }
+
+            &.priority-high:after {
+                background-color: $red;
+            }
+        }
+
+        .contents {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}
+
+.lists {
+    display: flex;
+    flex-direction: column;
+    opacity: 0.5;
+    transition: all 0.3s;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    .list,
+    .completed-list {
+        &:hover {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    }
+}

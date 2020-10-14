@@ -1,0 +1,68 @@
+@use 'variables';
+
+.overlay {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.8);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: none;
+    z-index: 100;
+
+    &.reveal {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .overlay-inner-item,
+    .overlay-inner-list {
+        position: relative;
+        display: none;
+        background-color: white;
+        min-width: 300px;
+        padding: 30px;
+
+        &.reveal {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}
+
+.overlay-inner-item .contents,
+.overlay-inner-list .contents {
+    display: flex;
+    flex-direction: column;
+
+    input,
+    textarea {
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 2px solid $font-color-light-grey;
+        resize: none;
+        transition: all 0.3s;
+
+        &::placeholder {
+            color: $font-color-light-grey;
+        }
+
+        &:focus {
+            outline: none;
+            border: 2px solid $font-color-semi-light;
+        }
+    }
+
+    input {
+        margin-bottom: 10px;
+    }
+
+    .priority-container {
+        display: flex;
+
+        label {
+            margin-right: 20px;
+        }
+    }
+}

@@ -1,0 +1,46 @@
+@use 'variables';
+
+html {
+    font-size: 17px;
+}
+
+body {
+    font-family: $main-font;
+    color: $font-color-grey;
+    line-height: 2rem;
+    font-weight: 400;
+}
+
+.headline {
+    font-family: $secondary-font;
+    color: $font-color-dark;
+
+    &--large {
+        font-weight: 500;
+        font-size: 3rem;
+        padding: 40px 0;
+        line-height: 4rem;
+        text-align: center;
+        margin: 0;
+    }
+    &--medium {
+        font-weight: 300;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+}
+
+.instructions {
+    color: $font-color-light-grey;
+
+    .sort {
+        text-decoration: underline;
+        transition: all 0.3s;
+
+        &:hover {
+            color: $font-color-grey;
+            cursor: pointer;
+        }
+    }
+}

@@ -4,6 +4,7 @@
     "description": "",
     "main": "main.js",
     "scripts": {
+        "deploy": "gh-pages -d dist",
         "css:scss": "node-sass --output-style compressed -o dist/css src/scss",
         "css:autoprefixer": "postcss -u autoprefixer -r dist/*/*.css",
         "css:lint": "stylelint src/scss/*.scss --syntax scss || true",
@@ -21,6 +22,7 @@
     },
     "author": "",
     "license": "ISC",
+    "homepage": "https://jesse-zonneveld.github.io/todo",
     "devDependencies": {
         "autoprefixer": "^9.0.0",
         "babel-core": "^6.26.3",
