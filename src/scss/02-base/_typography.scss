@@ -33,14 +33,17 @@ body {
 
 .instructions {
     color: $font-color-light-grey;
+}
 
-    .sort {
-        text-decoration: underline;
-        transition: all 0.3s;
+.contents__title {
+    font-size: 1.5rem;
+    color: $font-color-grey;
+    margin-bottom: 10px;
+    border-bottom: 2px solid $font-color-semi-light;
+    width: fit-content;
+}
 
-        &:hover {
-            color: $font-color-grey;
-            cursor: pointer;
-        }
-    }
+.contents__description {
+    color: $font-color-light-grey;
+    line-height: 1.5rem;
 }

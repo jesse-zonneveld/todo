@@ -6,8 +6,8 @@ class List {
         this.items = items;
     }
 
-    addItem(title, dueDate, description) {
-        const item = new Item(title, description, dueDate);
+    addItem(title, priority, description = "") {
+        const item = new Item(title, priority, description);
         this.items.push(item);
     }
 
@@ -19,18 +19,16 @@ class List {
         return this.items.length;
     }
 
-    swap(i1, i2) {
-        [this.items[i1], this.items[i2]] = [this.items[i2], this.items[i1]];
+    moveItem(from, to) {
+        this.items.splice(to, 0, this.items.splice(from, 1)[0]);
     }
 
     topItem() {
         return this.items[0];
     }
 
-    sortByDate() {
-        console.log(this.topItem());
-        this.items.sort((a, b) => b.dueDate - a.dueDate);
-        console.log(this.topItem());
+    sortByPriority() {
+        this.items.sort((a, b) => b.getPriority() - a.getPriority());
     }
 }
 

@@ -24,6 +24,7 @@
 
 .btn-add-item {
     background-color: $yellow;
+    margin-bottom: 100px;
 }
 
 .btn-create-item,
@@ -46,6 +47,16 @@
 
     &:hover {
         color: white;
+    }
+}
+
+.btn-sort {
+    text-decoration: underline;
+    transition: all 0.3s;
+
+    &:hover {
+        color: $font-color-grey;
+        cursor: pointer;
     }
 }
 
