@@ -7,20 +7,18 @@ class ToDoBoard {
             this.initializeLists();
         }
         this.currentListIndex = 0;
+        this.currentPriority = "low";
         this.listsContainer = document.querySelector(".lists");
         this.currentItems = document.querySelector(".items");
         this.newListBtn = document.querySelector(".btn-new-list");
         this.addItemBtn = document.querySelector(".btn-add-item");
         this.sortBtn = document.querySelector(".btn-sort");
+        this.priorityBtn = document.querySelector(".three-way-btn");
         this.overlay = document.querySelector(".overlay");
+        this.overlayItemBtn = document.querySelector(".btn-create-item");
+        this.overlayListBtn = document.querySelector(".btn-create-list");
         this.overlayCloseBtns = this.overlay.querySelectorAll(
             ".btn-overlay-close"
-        );
-        this.overlayCreateListBtn = this.overlay.querySelector(
-            ".btn-create-list"
-        );
-        this.overlayCreateItemBtn = this.overlay.querySelector(
-            ".btn-create-item"
         );
         this.setCurrentItems(this.lists[this.currentListIndex]);
         this.setLists();
@@ -30,14 +28,7 @@ class ToDoBoard {
     events() {
         this.currentItems.addEventListener("dragover", this.onDragOver);
         this.currentItems.addEventListener("drop", this.onDrop.bind(this));
-        this.currentItems.addEventListener(
-            "mouseover",
-            this.onMouseOver.bind(this)
-        );
-        this.currentItems.addEventListener(
-            "mouseout",
-            this.onMouseOut.bind(this)
-        );
+
         // this.currentItems.addEventListener("click", this.onClick.bind(this));
         this.addItemBtn.addEventListener(
             "click",
@@ -48,21 +39,26 @@ class ToDoBoard {
             this.handleOverlay.bind(this)
         );
         this.sortBtn.addEventListener("click", this.sortByPriority.bind(this));
-        this.overlay.addEventListener("click", this.closeOverlay.bind(this));
+        this.overlay.addEventListener(
+            "click",
+            this.closeAndClearOverlay.bind(this)
+        );
         this.overlayCloseBtns.forEach((btn) => {
-            btn.addEventListener("click", this.closeOverlay.bind(this));
+            btn.addEventListener("click", this.closeAndClearOverlay.bind(this));
         });
-        this.overlayCreateListBtn.addEventListener(
+
+        this.overlayItemBtn.addEventListener(
             "click",
-            this.createList.bind(this)
+            this.handleCreateOrEdit.bind(this)
         );
-        this.overlayCreateItemBtn.addEventListener(
+        this.overlayListBtn.addEventListener(
             "click",
-            this.createItem.bind(this)
+            this.handleCreateOrEdit.bind(this)
         );
-        document.querySelectorAll(".list").forEach((list) => {
-            list.addEventListener("click", this.changeList.bind(this));
-        });
+        this.priorityBtn.addEventListener(
+            "click",
+            this.setPriorityFromClick.bind(this)
+        );
     }
 
     initializeLists() {
@@ -148,9 +144,56 @@ class ToDoBoard {
         this.lists.forEach((list, i) => {
             this.listsContainer.insertAdjacentHTML(
                 "beforeend",
-                `<li class="list" data-index="${i}">${list.label}</li>`
+                `<li class="list" data-index="${i}">
+                    <div class="list-label">${list.label}</div>
+                    <div class="options">
+                        <div class="list-edit">
+                            <i class="fas fa-edit btn-edit-list"></i>
+                        </div>
+                        <div class="list-delete">
+                            <i class="far fa-trash-alt btn-delete-list"></i>
+                        </div>
+                    </div>
+                </li>`
             );
         });
+        document.querySelectorAll(".list").forEach((list) => {
+            list.addEventListener("click", this.handleListClick.bind(this));
+        });
+    }
+
+    setPriorityFromClick(e) {
+        e.currentTarget.classList.remove("switch-low");
+        e.currentTarget.classList.remove("switch-medium");
+        e.currentTarget.classList.remove("switch-high");
+
+        if (e.target.classList.contains("btn-low")) {
+            console.log("low");
+            e.currentTarget.classList.add("switch-low");
+            this.currentPriority = "low";
+        } else if (e.target.classList.contains("btn-medium")) {
+            console.log("medium");
+            e.currentTarget.classList.add("switch-medium");
+            this.currentPriority = "medium";
+        } else if (e.target.classList.contains("btn-high")) {
+            console.log("high");
+            e.currentTarget.classList.add("switch-high");
+            this.currentPriority = "high";
+        }
+    }
+
+    setPriorityFromEdit(priority) {
+        this.priorityBtn.classList.remove("switch-low");
+        this.priorityBtn.classList.remove("switch-medium");
+        this.priorityBtn.classList.remove("switch-high");
+
+        if (priority == 1) {
+            this.priorityBtn.classList.add("switch-low");
+        } else if (priority == 2) {
+            this.priorityBtn.classList.add("switch-medium");
+        } else if (priority == 3) {
+            this.priorityBtn.classList.add("switch-high");
+        }
     }
 
     sortByPriority() {
@@ -168,8 +211,7 @@ class ToDoBoard {
             this.deleteItem(e.currentTarget.dataset.itemIndex);
             this.setCurrentItems(this.lists[this.currentListIndex]);
         } else if (e.target.classList.contains("btn-edit-item")) {
-            console.log("edit");
-            this.editItem(e.currentTarget.dataset.itemIndex, e);
+            this.startEditItem(e);
             this.setCurrentItems(this.lists[this.currentListIndex]);
         } else if (e.target.classList.contains("item__checkBox")) {
             console.log("check");
@@ -177,13 +219,55 @@ class ToDoBoard {
         }
     }
 
+    handleListClick(e) {
+        if (e.target.classList.contains("btn-delete-list")) {
+            this.deleteList(e.currentTarget.dataset.index);
+            this.setLists();
+        } else if (e.target.classList.contains("btn-edit-list")) {
+            this.startEditList(e);
+            this.setLists();
+        } else {
+            this.changeList(e);
+        }
+    }
+
+    handleCreateOrEdit(e) {
+        if (e.currentTarget == this.overlayItemBtn) {
+            if (e.currentTarget.innerHTML == "Create Item") {
+                this.createItem();
+            } else {
+                this.saveEditItem();
+            }
+            this.setCurrentItems(this.lists[this.currentListIndex]);
+        } else if (e.currentTarget == this.overlayListBtn) {
+            if (e.currentTarget.innerHTML == "Create List") {
+                this.createList();
+            } else {
+                this.saveEditList();
+            }
+            this.setLists();
+        }
+        this.closeAndClearOverlay(e);
+    }
+
     deleteItem(index) {
         this.lists[this.currentListIndex].removeItem(index);
     }
 
-    editItem(index, e) {
+    deleteList(index) {
+        this.lists.splice(index, 1);
+    }
+
+    startEditItem(e) {
+        this.IndexEditItem = e.currentTarget.dataset.itemIndex;
         this.setOverlay(true, true);
         this.openOverlay(true, true);
+    }
+
+    startEditList(e) {
+        this.IndexEditList = e.currentTarget.dataset.index;
+        this.setOverlay(false, true);
+        this.openOverlay(false, true);
     }
 
     handleCheck(index) {}
@@ -191,26 +275,47 @@ class ToDoBoard {
     setOverlay(isItem = false, isEdit = false) {
         if (isItem) {
             if (isEdit) {
-                this.overlay.querySelector(".item-title").innerHTML =
+                this.overlay.querySelector(".overlay-item-title").innerHTML =
                     "Edit Item";
+                this.overlay.querySelector(
+                    ".input-item-title"
+                ).value = this.lists[this.currentListIndex].items[
+                    this.IndexEditItem
+                ].title;
+
+                this.overlay.querySelector(
+                    ".input-item-desc"
+                ).value = this.lists[this.currentListIndex].items[
+                    this.IndexEditItem
+                ].description;
+
+                this.setPriorityFromEdit(
+                    this.lists[this.currentListIndex].items[
+                        this.IndexEditItem
+                    ].getPriority()
+                );
                 this.overlay.querySelector(".btn-create-item").innerHTML =
                     "Save";
             } else {
-                this.overlay.querySelector(".item-title").innerHTML =
+                this.overlay.querySelector(".overlay-item-title").innerHTML =
                     "New Item";
                 this.overlay.querySelector(".btn-create-item").innerHTML =
                     "Create Item";
             }
         } else {
             if (isEdit) {
-                this.overlay.querySelector(".list-title").innerHTML =
+                this.overlay.querySelector(".overlay-list-title").innerHTML =
                     "Edit List";
-                this.overlay.querySelector(".btn-create-item").innerHTML =
+                this.overlay.querySelector(
+                    ".input-list-label"
+                ).value = this.lists[this.IndexEditList].label;
+
+                this.overlay.querySelector(".btn-create-list").innerHTML =
                     "Save";
             } else {
-                this.overlay.querySelector(".item-title").innerHTML =
+                this.overlay.querySelector(".overlay-list-title").innerHTML =
                     "New List";
-                this.overlay.querySelector(".btn-create-item").innerHTML =
+                this.overlay.querySelector(".btn-create-list").innerHTML =
                     "Create List";
             }
         }
@@ -220,7 +325,7 @@ class ToDoBoard {
         if (e.currentTarget == this.addItemBtn) {
             this.setOverlay(true);
             this.openOverlay(true);
-        } else {
+        } else if (e.currentTarget == this.newListBtn) {
             this.setOverlay();
             this.openOverlay();
         }
@@ -246,19 +351,45 @@ class ToDoBoard {
         document.body.classList.add("no-scroll");
     }
 
-    closeOverlay(e) {
+    closeAndClearOverlay(e) {
         if (e.target == e.currentTarget) {
             this.overlay.classList.remove("reveal");
             document.body.classList.remove("no-scroll");
+            this.overlay.querySelector(".input-list-label").value = "";
+            this.overlay.querySelector(".input-item-title").value = "";
+            this.overlay.querySelector(".input-item-desc").value = "";
         }
     }
 
     createList(e) {
-        const title = document.querySelector(".input-list-title").value;
-        this.lists.push(new List(title));
+        console.log("Create List");
+        const label = this.overlay.querySelector(".input-list-label").value;
+        this.lists.push(new List(label));
     }
 
-    createItem(e) {}
+    saveEditList() {
+        console.log("edit list");
+        const label = this.overlay.querySelector(".input-list-label").value;
+        this.lists[this.IndexEditList].label = label;
+    }
+
+    createItem(e) {
+        console.log("create item");
+        const title = this.overlay.querySelector(".input-item-title").value;
+        const priority = this.currentPriority;
+        const desc = this.overlay.querySelector(".input-item-desc").value;
+        this.lists[this.currentListIndex].addItem(title, priority, desc);
+    }
+
+    saveEditItem() {
+        console.log("edit item");
+        const title = this.overlay.querySelector(".input-item-title").value;
+        const priority = "low";
+        const desc = this.overlay.querySelector(".input-item-desc").value;
+        this.lists[this.currentListIndex].items[
+            this.IndexEditItem
+        ].updateFields(title, priority, desc);
+    }
 
     onDragStart(e) {
         e.dataTransfer.setData("text/plain", e.target.dataset.itemIndex);
@@ -297,49 +428,6 @@ class ToDoBoard {
             }
         }
     }
-
-    onMouseOver(e) {
-        for (let i = 0; i < e.path.length; i++) {
-            if (e.path[i].classList.contains("item")) {
-                e.path[i].querySelector(".options").classList.add("active");
-
-                return;
-            } else if (e.path[i].classList.contains("item-container")) {
-                return;
-            }
-        }
-    }
-
-    onMouseOut(e) {
-        for (let i = 0; i < e.path.length; i++) {
-            if (e.path[i].classList.contains("item")) {
-                e.path[i].querySelector(".options").classList.remove("active");
-
-                return;
-            } else if (e.path[i].classList.contains("item-container")) {
-                return;
-            }
-        }
-    }
-
-    // onClick(e) {
-    //     for (let i = 0; i < e.path.length; i++) {
-    //         if (e.path[i].classList.contains("item__checkBox")) {
-    //             console.log(e.path[i]);
-    //             e.path[i].classList.add("active");
-
-    //             return;
-    //         } else if (e.path[i].classList.contains("option__edit")) {
-    //             console.log(e.path[i]);
-    //             return;
-    //         } else if (e.path[i].classList.contains("option__delete")) {
-    //             console.log(e.path[i]);
-    //             return;
-    //         } else if (e.path[i].classList.contains("item-container")) {
-    //             return;
-    //         }
-    //     }
-    // }
 }
 
 export default ToDoBoard;

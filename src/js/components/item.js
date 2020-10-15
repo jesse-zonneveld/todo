@@ -13,7 +13,7 @@ class Item {
             case "low":
                 _priority = 1;
                 break;
-            case "med":
+            case "medium":
                 _priority = 2;
                 break;
             case "high":
@@ -25,6 +25,12 @@ class Item {
                 break;
         }
         return _priority;
+    }
+
+    updateFields(title, priority, description) {
+        this.title = title;
+        this.priority = priority;
+        this.description = description;
     }
 }
 

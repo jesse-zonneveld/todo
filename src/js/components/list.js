@@ -1,7 +1,7 @@
 import Item from "./item";
 
 class List {
-    constructor(label, items = []) {
+    constructor(label = "New List", items = []) {
         this.label = label;
         this.items = items;
     }
