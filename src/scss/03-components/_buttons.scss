@@ -25,6 +25,18 @@
 .btn-add-item {
     background-color: $yellow;
     margin-bottom: 100px;
+
+    &.hide {
+        display: none;
+    }
+}
+
+.btn-clear-list {
+    background-color: $red;
+
+    &.hide {
+        display: none;
+    }
 }
 
 .btn-create-item,

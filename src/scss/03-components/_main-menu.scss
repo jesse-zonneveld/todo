@@ -2,16 +2,17 @@
 
 .main-content {
     display: flex;
+    justify-content: space-between;
 
     .lists-section {
         display: flex;
         flex-direction: column;
-        margin-right: 50px;
+        width: 20%;
     }
 
     .items-section {
         position: relative;
-        width: 100%;
+        width: 75%;
 
         .items {
             position: relative;
@@ -23,7 +24,7 @@
         .instructions {
             position: absolute;
             top: -40px;
-            right: 0;
+            right: 5px;
             margin-left: 20px;
         }
 
@@ -34,9 +35,19 @@
 }
 
 .item-container {
+    max-height: 300px;
+    transition: all 0.3s;
+    overflow: hidden;
+    width: 100%;
+
+    &.hide {
+        max-height: 0px;
+    }
+
     .item {
         position: relative;
         display: flex;
+        margin-right: 5px;
         margin-bottom: 20px;
         padding: 10px;
         background-color: white;
@@ -123,7 +134,7 @@
                 background-color: $green;
             }
 
-            &.priority-med:after {
+            &.priority-medium:after {
                 background-color: $yellow;
             }
 

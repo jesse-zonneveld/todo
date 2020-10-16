@@ -12,6 +12,7 @@ class ToDoBoard {
         this.currentItems = document.querySelector(".items");
         this.newListBtn = document.querySelector(".btn-new-list");
         this.addItemBtn = document.querySelector(".btn-add-item");
+        this.clearListBtn = document.querySelector(".btn-clear-list");
         this.sortBtn = document.querySelector(".btn-sort");
         this.priorityBtn = document.querySelector(".three-way-btn");
         this.overlay = document.querySelector(".overlay");
@@ -20,7 +21,7 @@ class ToDoBoard {
         this.overlayCloseBtns = this.overlay.querySelectorAll(
             ".btn-overlay-close"
         );
-        this.setCurrentItems(this.lists[this.currentListIndex]);
+        this.setCurrentItems();
         this.setLists();
         this.events();
     }
@@ -37,6 +38,10 @@ class ToDoBoard {
         this.newListBtn.addEventListener(
             "click",
             this.handleOverlay.bind(this)
+        );
+        this.clearListBtn.addEventListener(
+            "click",
+            this.clearCompletedList.bind(this)
         );
         this.sortBtn.addEventListener("click", this.sortByPriority.bind(this));
         this.overlay.addEventListener(
@@ -71,7 +76,7 @@ class ToDoBoard {
         );
         firstList.addItem(
             "Understand Priority",
-            "med",
+            "medium",
             "The color of the cirle to the left is representative of the item's priority. Low, medium, and high priority corresponds to green, yellow, and red respectively."
         );
         firstList.addItem(
@@ -81,7 +86,7 @@ class ToDoBoard {
         );
         firstList.addItem(
             "Reorganize Items",
-            "med",
+            "medium",
             "Press the 'Sort by priority' in the top right to organize from low to high priority, or simply just drag and drop items where you want."
         );
         firstList.addItem(
@@ -109,7 +114,11 @@ class ToDoBoard {
         this.lists.push(completedList);
     }
 
-    setCurrentItems(list) {
+    setCurrentItems() {
+        const list = this.lists[this.currentListIndex];
+        const active =
+            this.lists[this.lists.length - 1] == list ? "active" : "";
+
         this.currentItems.innerHTML = "";
         list.items.forEach((item, i) => {
             this.currentItems.insertAdjacentHTML(
@@ -124,7 +133,7 @@ class ToDoBoard {
                                 <i class="far fa-trash-alt btn-delete-item"></i>
                             </div>
                         </div>
-                        <div class="item__checkBox priority-${item.priority}"></div>
+                        <div class="item__checkBox priority-${item.priority} ${active}"></div>
                         <div class="contents">
                             <div class="contents__title">${item.title}</div>
                             <div class="contents__description">${item.description}</div>
@@ -187,35 +196,36 @@ class ToDoBoard {
         this.priorityBtn.classList.remove("switch-medium");
         this.priorityBtn.classList.remove("switch-high");
 
-        if (priority == 1) {
+        if (priority == "low") {
             this.priorityBtn.classList.add("switch-low");
-        } else if (priority == 2) {
+            this.currentPriority = "low";
+        } else if (priority == "medium") {
             this.priorityBtn.classList.add("switch-medium");
-        } else if (priority == 3) {
+            this.currentPriority = "medium";
+        } else if (priority == "high") {
             this.priorityBtn.classList.add("switch-high");
+            this.currentPriority = "high";
         }
     }
 
     sortByPriority() {
         this.lists[this.currentListIndex].sortByPriority();
-        this.setCurrentItems(this.lists[this.currentListIndex]);
-    }
-
-    changeList(e) {
-        this.currentListIndex = e.currentTarget.dataset.index;
-        this.setCurrentItems(this.lists[this.currentListIndex]);
+        this.setCurrentItems();
     }
 
     handleItemClick(e) {
+        const itemContainer = e.currentTarget;
+        const itemIndex = e.currentTarget.dataset.itemIndex;
         if (e.target.classList.contains("btn-delete-item")) {
-            this.deleteItem(e.currentTarget.dataset.itemIndex);
-            this.setCurrentItems(this.lists[this.currentListIndex]);
+            this.deleteItem(itemContainer, itemIndex);
+            setTimeout(() => {
+                this.setCurrentItems();
+            }, 500);
         } else if (e.target.classList.contains("btn-edit-item")) {
-            this.startEditItem(e);
-            this.setCurrentItems(this.lists[this.currentListIndex]);
+            this.startEditItem(itemIndex);
+            this.setCurrentItems();
         } else if (e.target.classList.contains("item__checkBox")) {
-            console.log("check");
-            this.handleCheck(e.currentTarget.dataset.itemIndex);
+            this.handleCheck(itemContainer, itemIndex);
         }
     }
 
@@ -231,6 +241,34 @@ class ToDoBoard {
         }
     }
 
+    changeList(e) {
+        this.currentListIndex = e.currentTarget.dataset.index;
+        this.setCurrentItems();
+        if (
+            this.lists[this.currentListIndex] ==
+            this.lists[this.lists.length - 1]
+        ) {
+            this.addBtn("clear");
+        } else {
+            this.addBtn("add");
+        }
+    }
+
+    addBtn(type) {
+        if (type == "clear") {
+            this.addItemBtn.classList.add("hide");
+            this.clearListBtn.classList.remove("hide");
+        } else if (type == "add") {
+            this.addItemBtn.classList.remove("hide");
+            this.clearListBtn.classList.add("hide");
+        }
+    }
+
+    clearCompletedList(e) {
+        this.lists[this.lists.length - 1].clearItems();
+        this.setCurrentItems();
+    }
+
     handleCreateOrEdit(e) {
         if (e.currentTarget == this.overlayItemBtn) {
             if (e.currentTarget.innerHTML == "Create Item") {
@@ -238,7 +276,7 @@ class ToDoBoard {
             } else {
                 this.saveEditItem();
             }
-            this.setCurrentItems(this.lists[this.currentListIndex]);
+            this.setCurrentItems();
         } else if (e.currentTarget == this.overlayListBtn) {
             if (e.currentTarget.innerHTML == "Create List") {
                 this.createList();
@@ -250,16 +288,18 @@ class ToDoBoard {
         this.closeAndClearOverlay(e);
     }
 
-    deleteItem(index) {
+    deleteItem(itemContainer, index) {
+        console.log(itemContainer);
         this.lists[this.currentListIndex].removeItem(index);
+        itemContainer.classList.add("hide");
     }
 
     deleteList(index) {
         this.lists.splice(index, 1);
     }
 
-    startEditItem(e) {
-        this.IndexEditItem = e.currentTarget.dataset.itemIndex;
+    startEditItem(index) {
+        this.IndexEditItem = index;
         this.setOverlay(true, true);
         this.openOverlay(true, true);
     }
@@ -270,7 +310,29 @@ class ToDoBoard {
         this.openOverlay(false, true);
     }
 
-    handleCheck(index) {}
+    handleCheck(itemContainer, index) {
+        this.addCheckMark(itemContainer);
+        setTimeout(() => {
+            this.copyItemToCompletedList(index);
+
+            this.deleteItem(itemContainer, index);
+            setTimeout(() => {
+                this.setCurrentItems("active");
+            }, 500);
+        }, 2000);
+    }
+
+    addCheckMark(itemContainer) {
+        itemContainer.querySelector(".item__checkBox").classList.add(`active`);
+    }
+
+    copyItemToCompletedList(index) {
+        const title = this.lists[this.currentListIndex].items[index].title;
+        const desc = this.lists[this.currentListIndex].items[index].description;
+        const priority = this.lists[this.currentListIndex].items[index]
+            .priority;
+        this.lists[this.lists.length - 1].addItem(title, priority, desc, false);
+    }
 
     setOverlay(isItem = false, isEdit = false) {
         if (isItem) {
@@ -290,9 +352,8 @@ class ToDoBoard {
                 ].description;
 
                 this.setPriorityFromEdit(
-                    this.lists[this.currentListIndex].items[
-                        this.IndexEditItem
-                    ].getPriority()
+                    this.lists[this.currentListIndex].items[this.IndexEditItem]
+                        .priority
                 );
                 this.overlay.querySelector(".btn-create-item").innerHTML =
                     "Save";
@@ -384,7 +445,7 @@ class ToDoBoard {
     saveEditItem() {
         console.log("edit item");
         const title = this.overlay.querySelector(".input-item-title").value;
-        const priority = "low";
+        const priority = this.currentPriority;
         const desc = this.overlay.querySelector(".input-item-desc").value;
         this.lists[this.currentListIndex].items[
             this.IndexEditItem
@@ -423,7 +484,7 @@ class ToDoBoard {
                     dropIndex
                 );
 
-                this.setCurrentItems(this.lists[this.currentListIndex]);
+                this.setCurrentItems();
                 return;
             }
         }

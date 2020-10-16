@@ -6,9 +6,13 @@ class List {
         this.items = items;
     }
 
-    addItem(title, priority, description = "") {
+    addItem(title, priority, description = "", push = true) {
         const item = new Item(title, priority, description);
-        this.items.push(item);
+        if (push) {
+            this.items.push(item);
+        } else {
+            this.items.unshift(item);
+        }
     }
 
     removeItem(index) {
@@ -29,6 +33,10 @@ class List {
 
     sortByPriority() {
         this.items.sort((a, b) => b.getPriority() - a.getPriority());
+    }
+
+    clearItems() {
+        this.items = [];
     }
 }
 
