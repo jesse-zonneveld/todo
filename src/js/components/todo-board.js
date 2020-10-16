@@ -8,7 +8,7 @@ class ToDoBoard {
         }
         this.currentListIndex = 0;
         this.currentPriority = "low";
-        this.listsContainer = document.querySelector(".lists");
+        this.listsDOM = document.querySelector(".lists");
         this.currentItems = document.querySelector(".items");
         this.newListBtn = document.querySelector(".btn-new-list");
         this.addItemBtn = document.querySelector(".btn-add-item");
@@ -39,6 +39,9 @@ class ToDoBoard {
             "click",
             this.handleOverlay.bind(this)
         );
+        document
+            .querySelector(".create-list-in-menu")
+            .addEventListener("click", this.handleOverlay.bind(this));
         this.clearListBtn.addEventListener(
             "click",
             this.clearCompletedList.bind(this)
@@ -149,9 +152,9 @@ class ToDoBoard {
     }
 
     setLists() {
-        this.listsContainer.innerHTML = "";
+        this.listsDOM.innerHTML = "";
         this.lists.forEach((list, i) => {
-            this.listsContainer.insertAdjacentHTML(
+            this.listsDOM.insertAdjacentHTML(
                 "beforeend",
                 `<li class="list" data-index="${i}">
                     <div class="list-label">${list.label}</div>
@@ -166,8 +169,15 @@ class ToDoBoard {
                 </li>`
             );
         });
-        document.querySelectorAll(".list").forEach((list) => {
+        this.listsDOM.insertAdjacentHTML(
+            "beforeend",
+            '<li class="create-list-in-menu">Create New List</li>'
+        );
+        document.querySelectorAll(".list").forEach((list, i) => {
             list.addEventListener("click", this.handleListClick.bind(this));
+            if (i == this.lists.length - 1) {
+                list.classList.add("completed-items-list");
+            }
         });
     }
 
@@ -177,15 +187,12 @@ class ToDoBoard {
         e.currentTarget.classList.remove("switch-high");
 
         if (e.target.classList.contains("btn-low")) {
-            console.log("low");
             e.currentTarget.classList.add("switch-low");
             this.currentPriority = "low";
         } else if (e.target.classList.contains("btn-medium")) {
-            console.log("medium");
             e.currentTarget.classList.add("switch-medium");
             this.currentPriority = "medium";
         } else if (e.target.classList.contains("btn-high")) {
-            console.log("high");
             e.currentTarget.classList.add("switch-high");
             this.currentPriority = "high";
         }
@@ -231,7 +238,14 @@ class ToDoBoard {
 
     handleListClick(e) {
         if (e.target.classList.contains("btn-delete-list")) {
-            this.deleteList(e.currentTarget.dataset.index);
+            const listIndex = e.currentTarget.dataset.index;
+            this.deleteList(listIndex);
+            if (this.currentListIndex == listIndex) {
+                this.currentListIndex = this.lists.length - 1;
+                this.setCurrentItems();
+                this.setTitle();
+                this.checkIfInCompletedItemsList();
+            }
             this.setLists();
         } else if (e.target.classList.contains("btn-edit-list")) {
             this.startEditList(e);
@@ -243,7 +257,12 @@ class ToDoBoard {
 
     changeList(e) {
         this.currentListIndex = e.currentTarget.dataset.index;
+        this.setTitle();
         this.setCurrentItems();
+        this.checkIfInCompletedItemsList();
+    }
+
+    checkIfInCompletedItemsList() {
         if (
             this.lists[this.currentListIndex] ==
             this.lists[this.lists.length - 1]
@@ -252,6 +271,12 @@ class ToDoBoard {
         } else {
             this.addBtn("add");
         }
+    }
+
+    setTitle() {
+        document.querySelector(".main-title").innerHTML = this.lists[
+            this.currentListIndex
+        ].label;
     }
 
     addBtn(type) {
@@ -280,8 +305,12 @@ class ToDoBoard {
         } else if (e.currentTarget == this.overlayListBtn) {
             if (e.currentTarget.innerHTML == "Create List") {
                 this.createList();
+                this.currentListIndex = 0;
+                this.setTitle();
+                this.setCurrentItems();
             } else {
                 this.saveEditList();
+                this.setTitle();
             }
             this.setLists();
         }
@@ -289,7 +318,6 @@ class ToDoBoard {
     }
 
     deleteItem(itemContainer, index) {
-        console.log(itemContainer);
         this.lists[this.currentListIndex].removeItem(index);
         itemContainer.classList.add("hide");
     }
@@ -386,7 +414,10 @@ class ToDoBoard {
         if (e.currentTarget == this.addItemBtn) {
             this.setOverlay(true);
             this.openOverlay(true);
-        } else if (e.currentTarget == this.newListBtn) {
+        } else if (
+            e.currentTarget == this.newListBtn ||
+            e.currentTarget == document.querySelector(".create-list-in-menu")
+        ) {
             this.setOverlay();
             this.openOverlay();
         }
@@ -423,19 +454,16 @@ class ToDoBoard {
     }
 
     createList(e) {
-        console.log("Create List");
         const label = this.overlay.querySelector(".input-list-label").value;
-        this.lists.push(new List(label));
+        this.lists.unshift(new List(label));
     }
 
     saveEditList() {
-        console.log("edit list");
         const label = this.overlay.querySelector(".input-list-label").value;
         this.lists[this.IndexEditList].label = label;
     }
 
     createItem(e) {
-        console.log("create item");
         const title = this.overlay.querySelector(".input-item-title").value;
         const priority = this.currentPriority;
         const desc = this.overlay.querySelector(".input-item-desc").value;
@@ -443,7 +471,6 @@ class ToDoBoard {
     }
 
     saveEditItem() {
-        console.log("edit item");
         const title = this.overlay.querySelector(".input-item-title").value;
         const priority = this.currentPriority;
         const desc = this.overlay.querySelector(".input-item-desc").value;

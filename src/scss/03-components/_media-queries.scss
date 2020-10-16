@@ -1,0 +1,56 @@
+@use 'variables';
+
+@media only screen and (max-width: 1200px) {
+    .l-container-1080 {
+        width: 90%;
+    }
+}
+
+@media only screen and (max-width: 1080px) {
+    body .main-content {
+        .lists-section {
+            width: 0;
+            overflow: hidden;
+
+            .lists-container {
+                position: absolute;
+                top: 20px;
+                left: 30px;
+                z-index: 10;
+
+                .lists-title {
+                    display: block;
+                    margin-bottom: 10px;
+                }
+
+                .lists {
+                    display: none;
+                    padding: 10px 20px 10px 0;
+
+                    .list .options {
+                        margin-right: 10px;
+                        margin-left: 30px;
+                    }
+
+                    .create-list-in-menu {
+                        display: block;
+                        margin-left: 20px;
+                    }
+                }
+
+                &:hover {
+                    .lists {
+                        display: flex;
+                        background-color: white;
+                        box-shadow: $shadow;
+                        opacity: 1;
+                    }
+                }
+            }
+        }
+
+        .items-section {
+            width: 100%;
+        }
+    }
+}

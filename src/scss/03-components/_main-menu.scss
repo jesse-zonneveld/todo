@@ -146,6 +146,7 @@
         .contents {
             display: flex;
             flex-direction: column;
+            margin-right: 20px;
         }
     }
 
@@ -202,5 +203,30 @@
                 opacity: 1;
             }
         }
+    }
+}
+
+.completed-items-list {
+    .btn-delete-list {
+        display: none !important;
+    }
+}
+
+.lists-title {
+    text-align: left;
+    font-size: 2rem;
+    display: none;
+
+    i {
+        margin-right: 10px;
+    }
+}
+
+.create-list-in-menu {
+    display: none;
+    color: $green;
+    &:hover {
+        cursor: pointer;
+        text-decoration: underline;
     }
 }
