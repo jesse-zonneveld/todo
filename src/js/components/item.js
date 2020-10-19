@@ -1,7 +1,8 @@
 // import moment from "moment";
 
 class Item {
-    constructor(title, priority, description = "") {
+    constructor(title = "new item", priority = "low", description = "") {
+        this.__className = "Item";
         this.title = title;
         this.priority = priority;
         this.description = description;
@@ -32,6 +33,10 @@ class Item {
         this.priority = priority;
         this.description = description;
     }
+
+    // static fromJSON(serializedJson) {
+    //     return Object.assign(new Item(), JSON.parse(serializedJson));
+    // }
 }
 
 export default Item;

@@ -1,11 +1,16 @@
 import List from "./list";
+import ObjectRebuilder from "./objectRebuilder";
 
 class ToDoBoard {
-    constructor(lists = []) {
-        this.lists = lists;
-        if (lists.length === 0) {
+    constructor() {
+        this.lists =
+            ObjectRebuilder.restoreObject(
+                JSON.parse(localStorage.getItem("lists"))
+            ) || [];
+        if (this.lists.length === 0) {
             this.initializeLists();
         }
+
         this.currentListIndex = 0;
         this.currentPriority = "low";
         this.listsDOM = document.querySelector(".lists");
@@ -154,6 +159,9 @@ class ToDoBoard {
             item.addEventListener("dragstart", this.onDragStart.bind(this));
             item.addEventListener("click", this.handleItemClick.bind(this));
         });
+
+        localStorage.setItem("lists", JSON.stringify(this.lists));
+        this.setTitle();
     }
 
     setLists() {
@@ -184,6 +192,8 @@ class ToDoBoard {
                 list.classList.add("completed-items-list");
             }
         });
+
+        localStorage.setItem("lists", JSON.stringify(this.lists));
     }
 
     setPriorityFromClick(e) {

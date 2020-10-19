@@ -2,6 +2,7 @@ import Item from "./item";
 
 class List {
     constructor(label = "New List", items = []) {
+        this.__className = "List";
         this.label = label;
         this.items = items;
     }
@@ -38,6 +39,10 @@ class List {
     clearItems() {
         this.items = [];
     }
+
+    // static fromJSON(serializedJson) {
+    //     return Object.assign(new List(), JSON.parse(serializedJson));
+    // }
 }
 
 export default List;
