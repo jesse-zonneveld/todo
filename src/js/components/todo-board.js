@@ -184,7 +184,7 @@ class ToDoBoard {
         });
         this.listsDOM.insertAdjacentHTML(
             "beforeend",
-            '<li class="create-list-in-menu">Create New List</li>'
+            "<li class='create-list-in-menu'>Create New List</li>"
         );
         document.querySelectorAll(".list").forEach((list, i) => {
             list.addEventListener("click", this.handleListClick.bind(this));
@@ -304,7 +304,7 @@ class ToDoBoard {
         }
     }
 
-    clearCompletedList(e) {
+    clearCompletedList() {
         this.lists[this.lists.length - 1].clearItems();
         this.setCurrentItems();
     }
@@ -367,7 +367,7 @@ class ToDoBoard {
     }
 
     addCheckMark(itemContainer) {
-        itemContainer.querySelector(".item__checkBox").classList.add(`active`);
+        itemContainer.querySelector(".item__checkBox").classList.add("active");
     }
 
     copyItemToCompletedList(index) {
@@ -469,7 +469,7 @@ class ToDoBoard {
         }
     }
 
-    createList(e) {
+    createList() {
         const label = this.overlay.querySelector(".input-list-label").value;
         this.lists.unshift(new List(label));
     }
@@ -479,7 +479,7 @@ class ToDoBoard {
         this.lists[this.IndexEditList].label = label;
     }
 
-    createItem(e) {
+    createItem() {
         const title = this.overlay.querySelector(".input-item-title").value;
         const priority = this.currentPriority;
         const desc = this.overlay.querySelector(".input-item-desc").value;

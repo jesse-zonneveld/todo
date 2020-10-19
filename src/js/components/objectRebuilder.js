@@ -23,6 +23,7 @@ class ObjectRebuilder {
         // which we got from JSON.parse. First, check if it
         // has "__className" property which we defined in the
         // constructor of each class
+        // eslint-disable-next-line no-prototype-builtins
         if (obj.hasOwnProperty("__className")) {
             let list = ObjectRebuilder.classList();
 
