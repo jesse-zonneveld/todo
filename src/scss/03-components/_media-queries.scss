@@ -54,3 +54,29 @@
         }
     }
 }
+
+@media only screen and (max-width: 600px) {
+    .main-title {
+        margin-top: 30px;
+    }
+    body .main-content .lists-section {
+        .lists-container {
+            top: 5px;
+            left: 10px;
+
+            .lists-title {
+                font-size: 1.5rem;
+            }
+        }
+    }
+
+    body .main-content .items-section {
+        .instructions-mobile {
+            display: block;
+        }
+
+        .instructions {
+            display: none;
+        }
+    }
+}

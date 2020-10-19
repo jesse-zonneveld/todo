@@ -23,15 +23,10 @@ body {
         text-align: center;
         margin-top: 0;
     }
-    &--medium {
-        font-weight: 300;
-        font-size: 2.5rem;
-        margin-bottom: 20px;
-        text-align: center;
-    }
 }
 
-.instructions {
+.instructions,
+.instructions-mobile {
     color: $font-color-light-grey;
 }
 
@@ -41,6 +36,19 @@ body {
     margin-bottom: 10px;
     border-bottom: 2px solid $font-color-semi-light;
     width: fit-content;
+}
+
+.lists-headline {
+    font-weight: 300;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    margin-top: 0;
+    text-align: left;
+    border-bottom: 2px solid #a0a0a0;
+    line-height: 2rem;
+    padding-bottom: 5px;
+    font-weight: 400;
 }
 
 .contents__description {

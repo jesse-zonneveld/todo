@@ -27,6 +27,13 @@
             right: 5px;
             margin-left: 20px;
         }
+        .instructions-mobile {
+            display: none;
+            position: absolute;
+            top: -40px;
+            right: 5px;
+            margin-left: 20px;
+        }
 
         .new-item-menu {
             display: flex;
@@ -35,7 +42,7 @@
 }
 
 .item-container {
-    max-height: 300px;
+    max-height: 500px;
     transition: all 0.3s;
     overflow: hidden;
     width: 100%;

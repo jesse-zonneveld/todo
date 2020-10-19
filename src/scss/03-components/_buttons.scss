@@ -19,7 +19,7 @@
 
 .btn-new-list {
     background-color: $green;
-    margin-bottom: 30px;
+    margin-top: 20px;
 }
 
 .btn-add-item {
@@ -62,7 +62,8 @@
     }
 }
 
-.btn-sort {
+.btn-sort,
+.btn-sort-mobile {
     text-decoration: underline;
     transition: all 0.3s;
 

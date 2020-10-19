@@ -14,6 +14,7 @@ class ToDoBoard {
         this.addItemBtn = document.querySelector(".btn-add-item");
         this.clearListBtn = document.querySelector(".btn-clear-list");
         this.sortBtn = document.querySelector(".btn-sort");
+        this.sortBtnMobile = document.querySelector(".btn-sort-mobile");
         this.priorityBtn = document.querySelector(".three-way-btn");
         this.overlay = document.querySelector(".overlay");
         this.overlayItemBtn = document.querySelector(".btn-create-item");
@@ -47,6 +48,10 @@ class ToDoBoard {
             this.clearCompletedList.bind(this)
         );
         this.sortBtn.addEventListener("click", this.sortByPriority.bind(this));
+        this.sortBtnMobile.addEventListener(
+            "click",
+            this.sortByPriority.bind(this)
+        );
         this.overlay.addEventListener(
             "click",
             this.closeAndClearOverlay.bind(this)
@@ -308,6 +313,7 @@ class ToDoBoard {
                 this.currentListIndex = 0;
                 this.setTitle();
                 this.setCurrentItems();
+                this.checkIfInCompletedItemsList();
             } else {
                 this.saveEditList();
                 this.setTitle();
