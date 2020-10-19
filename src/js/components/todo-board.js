@@ -3,11 +3,11 @@ import ObjectRebuilder from "./objectRebuilder";
 
 class ToDoBoard {
     constructor() {
-        this.lists =
-            ObjectRebuilder.restoreObject(
-                JSON.parse(localStorage.getItem("lists"))
-            ) || [];
-        if (this.lists.length === 0) {
+        const json = JSON.parse(localStorage.getItem("lists"));
+        this.lists = json || [];
+        if (json) {
+            this.lists = ObjectRebuilder.restoreObject(json);
+        } else {
             this.initializeLists();
         }
 
